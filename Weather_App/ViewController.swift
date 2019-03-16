@@ -94,9 +94,12 @@ class ViewController: UIViewController, UITextFieldDelegate {
                     DispatchQueue.main.sync(execute: {
                         // Check if the city data was found
                         if dataString!.weatherTDExtract(city: city) != [] {
-                            let extractedData = dataString!.weatherTDExtract(city: city)[0].weatherToday(city: city)[0];
-
-                            self.outputLabel.attributedText = extractedData.htmlToAttributedString;
+                            var extractedData = dataString!.weatherTDExtract(city: city)[0].weatherToday(city: city)[0];
+                            
+                            extractedData = extractedData.replacingOccurrences(of: "<span class=\"phrase\">", with: "")
+                                .replacingOccurrences(of: "</span>", with: "")
+                                .replacingOccurrences(of: "&deg;", with: "°");
+                            self.outputLabel.text = extractedData;
                             
                             // Use keyword matching to extract some basic information from the summary,
                             // use this to determine the background image.
